@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mini ERP Invoicing System
 
-## Getting Started
+A full-stack Mini ERP Invoicing System built with NestJS and Next.js, fulfilling all technical requirements.
 
-First, run the development server:
+## Tech Stack Used
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Backend:**
+- **Framework**: NestJS
+- **Language**: TypeScript
+- **Database**: SQLite (via Prisma) - *Prepared for Postgres/MySQL via easy Prisma schema migration*
+- **ORM**: Prisma
+- **Authentication**: JWT (JSON Web Tokens) with Passport
+- **API Documentation**: Swagger UI
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Frontend:**
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **State Management**: Zustand
+- **HTTP Client**: Axios
+- **Icons**: Lucide React
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js (v18 or newer recommended)
+- npm (Node Package Manager)
 
-## Learn More
+## Installation Steps
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone or Navigate to the project directory**
+   ```bash
+   cd "project intvw"
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Backend Setup**
+   ```bash
+   cd backend
+   npm install
+   # Generate Prisma client and migrate database
+   npx prisma generate
+   npx prisma migrate dev --name init
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Frontend Setup**
+   ```bash
+   cd ../frontend
+   npm install
+   ```
 
-## Deploy on Vercel
+## How to Run the Application Locally
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Start the Backend Server**
+   Open a terminal, navigate to the `backend` directory, and run:
+   ```bash
+   npm run start:dev
+   ```
+   *The backend API will run at `http://localhost:3000`.*
+   *Swagger API Documentation is available at `http://localhost:3000/api/docs`.*
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Start the Frontend Server**
+   Open another terminal, navigate to the `frontend` directory, and run:
+   ```bash
+   npm run dev
+   ```
+   *The frontend application will be available at `http://localhost:3001`.*
+
+## Architectural Decisions & Assumptions
+
+- **Database Choice for Local Dev**: Used SQLite instead of PostgreSQL for the initial setup to ensure a seamless local test run without needing to install a PostgreSQL server. Because Prisma is utilized, migrating to a microservice architecture and utilizing PostgreSQL/MySQL is straightforward by merely updating the `datasource` configuration in `prisma.config.ts`.
+- **Modular Backend Design**: NestJS heavily encourages a modular monolith. Modules for Auth, Users, Customers, Invoices, and Dashboard were created with distinct service layers. This isolates responsibilities, laying solid groundwork for future decomposition into microservices.
+- **Next.js App Router**: Employed the modern App Router (`/app`) for Server Components (RSC) capabilities, optimized rendering, and ease of routing.
+- **Tailwind & Glassmorphism UI**: Built beautiful, custom, reusable UI components (Button, Input, Card, Table) using Tailwind CSS with modern design paradigms such as subtle gradients, glassmorphism, and responsive layouts to ensure a "premium" feel.
+- **Authentication**: Set up basic JWT authentication with password hashing using bcrypt. A production environment might further separate auth into its own microservice/identity provider (like Auth0 or Keycloak).
+- **Zustand for State Management**: Selected Zustand for lightweight, boilerplate-free state management in the frontend, particularly for handling the authentication token efficiently.
+
+## Features Built
+- Secure User Authentication (Login/Register flow prepared via API).
+- Dashboard with aggregated metrics (Total Revenue, Customers, Pending Invoices).
+- Customer Management (View list, Add customers).
+- Invoicing System (Create multi-item invoices, view invoice history, update status).
